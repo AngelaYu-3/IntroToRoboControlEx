@@ -37,7 +37,7 @@ public class DriveTrain extends SubsystemBase {
   public void tankDrive(double lPower, double rPower){
       //setting inputted power to talons
       left.set(ControlMode.PercentOutput, lPower);
-      right.set(ControlMode.PercentOutput, lPower);
+      right.set(ControlMode.PercentOutput, rPower);
   }
 
   //using encoders to get distance travelled in ticks (raw sensor units)
