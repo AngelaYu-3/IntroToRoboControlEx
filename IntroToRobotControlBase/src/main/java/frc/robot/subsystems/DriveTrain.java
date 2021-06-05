@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,6 +19,9 @@ public class DriveTrain extends SubsystemBase {
   //left and right talon motors
   private WPI_TalonSRX left = new WPI_TalonSRX(RobotMap.leftDrivePort);
   private WPI_TalonSRX right = new WPI_TalonSRX(RobotMap.rightDrivePort);
+
+  //navX (gyro--returns angle)
+  private AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   /** Creates a new DriveTrain. This is the DriveTrain constructor*/
   public DriveTrain() {
@@ -48,6 +53,13 @@ public class DriveTrain extends SubsystemBase {
        return (rightTicks + leftTicks) / 2;
   }
 
+  public double getAngle(){
+    //returns angle about Z axis from -180 to 180
+    //neg left, pos right
+    System.out.println("ANGLE" + gyro.getAngle());
+    return gyro.getAngle();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -56,7 +68,8 @@ public class DriveTrain extends SubsystemBase {
     //look for this message in the RioLog and in Driverstation!
     System.out.println("HELLO!! RUNNING TANK DRIVE :)");
 
-    //look for encoder raw sensor units on in SmartDashboard
+    //look for encoder raw sensor units & angle turned in SmartDashboard
     SmartDashboard.putNumber("Distance In Raw Units", getDistanceTicks());
+    SmartDashboard.putNumber("Angle turned", getAngle());
   }
 }
